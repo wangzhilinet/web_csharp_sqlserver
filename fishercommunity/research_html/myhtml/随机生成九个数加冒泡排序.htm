@@ -1,0 +1,50 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>随机生成九个数加冒泡排序</title>
+    <script type="text/javascript">
+        var ranarr = new Array();
+        for (var i = 0; i < 9; i++) {
+            var count = 0
+            var num = Math.floor(Math.random() * 10);
+            if (num > 0) {
+                for (var i = 0; i < ranarr.length; i++) {
+                    if (num != ranarr[i]) {
+                        count++;
+                    }
+                }
+                if (count == ranarr.length) {
+                    ranarr[i] = num;
+                } else {
+                    i--;
+                }
+            } else {
+                i--;
+            }
+        }
+        alert(ranarr);
+        var temp = 0;
+        for (var i = 9; i > 0; i--) {
+            for (var j = 0; j < i - 1; j++) {
+                if (ranarr[j] > ranarr[j + 1]) {
+                    temp = ranarr[j];
+                    ranarr[j] = ranarr[j + 1];
+                    ranarr[j + 1] = temp;
+                }
+            }
+        }
+        alert(ranarr);
+    </script>
+</head>
+<body>
+    <p>
+        下面是一段javascript代码</p>
+    <p>
+        var ranarr = new Array(); for (var i = 0; i < 9; i++) { var count = 0 var num =
+        Math.floor(Math.random() * 10); if (num > 0) { for (var i = 0; i < ranarr.length;
+        i++) { if (num != ranarr[i]) { count++; } } if (count == ranarr.length) { ranarr[i]
+        = num; } else { i--; } } else { i--; } } alert(ranarr); var temp = 0; for (var i
+        = 9; i > 0; i--) { for (var j = 0; j < i - 1; j++) { if (ranarr[j] > ranarr[j +
+        1]) { temp = ranarr[j]; ranarr[j] = ranarr[j + 1]; ranarr[j + 1] = temp; } } } alert(ranarr);</p>
+</body>
+</html>

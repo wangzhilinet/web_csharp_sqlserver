@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>垂直菜单栏，皮肤切换，系统时间</title>
+    <script src="../../js/jquery/jquery.js" type="text/javascript"></script>
+    <script src="../../js/jquery/jquery.js" type="text/javascript"></script>
+    <script src="../../js/cookie/jquery.cookie.js" type="text/javascript"></script>
+    <script src="../../js/common/common.js" type="text/javascript"></script>
+    <link id="LinkThemeCss" href="../../css/light/wordstudy.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        /*
+        页面加载事件
+        */
+        $(function () {
+            //皮肤的初始化
+            //themeInitialize();
+        })
+        /*
+        皮肤初始化
+        */
+        function themeInitialize() {
+            $.cookie("theme", "light", { expires: 9999, path: '/' });
+        }
+        /*
+        下拉框改变皮肤
+        */
+        function changeSelectTheme() {
+            $("#selTheme").each(function () {
+                var val = $(this).val();
+                $.cookie("theme", "" + val + "", { expires: 9999, path: '/' });
+                //alert($.cookie("theme"));
+                var theme = $.cookie("theme");
+                $("#LinkThemeCss").attr("href", "../../css/" + theme + "/wordstudy.css");
+                //刷新页面
+                //location.reload();
+            })
+        }
+        /*
+        时间
+        */
+        var t = null;
+        t = setTimeout(time, 1000); //开始执行
+        function time() {
+            clearTimeout(t); //清除定时器，显示一闪一闪的效果
+            dt = new Date();
+            var h = dt.getHours();
+            var m = dt.getMinutes();
+            var s = dt.getSeconds();
+            document.getElementById("timeShow").innerHTML = "现在时间为：" + h + "时" + m + "分" + s + "秒";
+            t = setTimeout(time, 1000); //设定定时器，循环执行
+        }
+    </script>
+</head>
+<body>
+    <div class="selectTheme">
+        <select id="selTheme" class="selecttheme" onchange="changeSelectTheme()">
+            <option value="light" selected="selected">请选择</option>
+            <option value="light">light</option>
+            <option value="dark">dark</option>
+        </select>&nbsp;&nbsp;
+        <label id="timeShow">
+        </label>
+    </div>
+    <!--背景颜色 百度蓝：#63A2EF gray灰色-->
+    <div class="wrap">
+        <div class="nav">
+            <a href="#">每日记词</a> <a href="#">我的词库</a> <a href="#">美 文</a> <a href="#">多元思维</a></div>
+        <div class="content">
+            <h4>
+                version:版本</h4>
+            <h4>
+                community:社区</h4>
+            <h4>
+                gray:灰色</h4>
+            <h4>
+                fontcolor:字体颜色</h4>
+            <h4>
+                expires:到期</h4>
+            <h4>
+                theme:主题</h4>
+            <h4>
+                Initialize:初始化</h4>
+            <h4>
+                Proxy:代理</h4>
+            <h4>
+                utility:实用程序</h4>
+            <h4>
+                release:释放</h4>
+            <h4>
+                Dependencies:依赖关系，相关性，管理</h4>
+            <h4>
+                Quantity :数量</h4>
+            <h4>
+                Shared :共享</h4>
+            <h4>
+                Account:账户</h4>
+            <h4>
+                receive:接收</h4>
+            <h4>
+                default:默认的</h4>
+            <h4>
+                Customer:客户</h4>
+            <h4>
+                Message:消息</h4>
+            <h4>
+                Detail:细节</h4>
+            <h4>
+                PlugIns:插件</h4>
+            <h4>
+                inherits:引用</h4>
+            <h4>
+                eventargs:事件参数</h4>
+            <h4>
+                Instance:实例</h4>
+            <h4>
+                HD:High Definition:高保真</h4>
+            <h4>
+                response:响应</h4>
+            <h4>
+                parse:转换</h4>
+            <h4>
+                statistics:统计</h4>
+            <h4>
+                total:完全的，全部的</h4>
+            <h4>
+                slider:滑动块，滑雪器</h4>
+            <h4>
+                horizontal:水平线，水平面</h4>
+            <h4>
+                only show this dialog when the shift key is down ：shift键时只显示这个对话框</h4>
+            <h4>
+                vertical:垂直</h4>
+            <h4>
+                align:对齐</h4>
+            <h4>
+                Development:发展</h4>
+            <h4>
+                Java Runtime Envirnment:Java 运行环境</h4>
+            <h4>
+                Browser:浏览器</h4>
+            <h4>
+                Client:客户端</h4>
+            <h4>
+                Liveliness:生动</h4>
+            <h4>
+                Animation:动画</h4>
+            <h4>
+                Speed:速度</h4>
+            <h4>
+                Interactivity:交互性</h4>
+            <h4>
+                bolder:更醒目的</h4>
+            <h4>
+                inherit:继承</h4>
+            <h4>
+                group:集团</h4>
+            <h4>
+                Desktop:桌面</h4>
+            <h4>
+                Expression:表达式</h4>
+            <h4>
+                OwnerDocument:老板文档</h4>
+            <h4>
+                appendTo:追加</h4>
+            <h4>
+                callback:回调</h4>
+            <h4>
+                cough:咳嗽</h4>
+            <h4>
+                arguments:参数</h4>
+            <h4>
+                vertical-align: middle:垂直居中</h4>
+            <h3>
+                SQLserver</h3>
+            <h4>
+                adjective:形容词</h4>
+            <h4>
+                prat:部分</h4>
+            <h4>
+                massage:按摩</h4>
+            <h4>
+                answer:回答，答复</h4>
+            <h4>
+                look：望，看起来，看</h4>
+            <h4>
+                first:第一</h4>
+            <h4>
+                last:最后的，上一个的</h4>
+            <h4>
+                last name:姓氏</h4>
+            <h4>
+                first name:名字</h4>
+            <h4>
+                boy:男孩</h4>
+            <h4>
+                girl:女孩</h4>
+            <h4>
+                zero:零</h4>
+            <h4>
+                one,two,three,four,five,six,seven,eight,nine</h4>
+            <h4>
+                telephone:电话
+            </h4>
+            <h4>
+                number:数字</h4>
+            <h4>
+                card:卡片</h4>
+            <h4>
+                identification:身份</h4>
+            <h4>
+                family:家，家庭</h4>
+        </div>
+    </div>
+</body>
+</html>

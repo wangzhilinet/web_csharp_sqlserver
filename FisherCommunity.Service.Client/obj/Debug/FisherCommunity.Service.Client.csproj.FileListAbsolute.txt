@@ -1,0 +1,6 @@
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\bin\Debug\FisherCommunity.Service.Client.dll
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\bin\Debug\FisherCommunity.Service.Client.pdb
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\bin\Debug\Newtonsoft.Json.dll
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\obj\Debug\FisherCommunity.Service.Client.dll
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\obj\Debug\FisherCommunity.Service.Client.pdb
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.Service.Client\obj\Debug\FisherCommunity.Service.Client.csprojResolveAssemblyReference.cache

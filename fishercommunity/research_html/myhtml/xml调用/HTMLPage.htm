@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        var xmlHttp;
+        function loadXML() {
+            var url = "XMLFile.xml";
+            if (window.XMLHttpRequest) {
+                xmlHttp = new XMLHttpRequest();
+            }
+            else if (window.ActiveXObject) {
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            if (xmlHttp != null) {
+                xmlHttp.onreadystatechange = state_Change;
+                xmlHttp.open("GET", url, true);
+                xmlHttp.send(null);
+            } else {
+                alert("Your browser does not support XMLHTTP.");
+            }
+
+        }
+        function state_Change() {
+            if (xmlHttp.readyState == 4) {// 4 = "loaded"
+                if (xmlHttp.status == 200) {// 200 = "OK"
+                    document.getElementById('a1').innerHTML = xmlHttp.status;
+                    document.getElementById('a2').innerHTML = xmlHttp.statusText;
+                    document.getElementById('A3').innerHTML = xmlHttp.responseText;
+                }
+                else {
+                    alert("Problem retrieving XML data:" + xmlHttp.statusText);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <p id="a1">
+    </p>
+    <p id="a2">
+    </p>
+    <input id="Button1" type="button" onclick="loadXML()" value="button" />
+</body>
+</html>

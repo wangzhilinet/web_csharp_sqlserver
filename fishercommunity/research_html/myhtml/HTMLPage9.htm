@@ -1,0 +1,1735 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>重点SP_Streaming业务</title>
+    <link href="../../css/base.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/common.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/orange/important_sp_streaming.css" rel="stylesheet" type="text/css" />
+    <script src="../../js/jquery.js" type="text/javascript"></script>
+    <script src="../../js/common.js" type="text/javascript"></script>
+    <script src="../../js/config.js" type="text/javascript"></script>
+    <script src="../../js/echarts.min.js" type="text/javascript"></script>
+    <script src="../../js/json2.js" type="text/javascript"></script>
+    <script src="../../js/jquery.query.js" type="text/javascript"></script>
+    <script src="../../js/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+</head>
+<body>
+    <input id="dateCalendar" type="hidden" value="" />
+    <div class="wrap">
+        <div class="main">
+            <div class="tab_date_hour">
+                <div id="nav_date_btn" class="float_left nav_date">
+                    <div class="float_left" style="margin-right: 20px;">
+                        <!--tab_month-->
+                        <span>选择日期：</span> <span id="demospan" style="color: black">2017-03-02</span>
+                        <img id="dateBox" onclick="WdatePicker({el:'demospan',isShowClear:false,dateFmt:'yyyy-MM-dd', dchanged:cDayFunc, Mchanged:cMonthFunc, ychanged:cYearFunc});"
+                            src="../../js/My97DatePicker/skin/datePicker.gif" width="16" height="22" align="absmiddle"
+                            style="cursor: pointer" />
+                    </div>
+                </div>
+            </div>
+            <div class="main_top">
+                <div class="main_top_time_delay">
+                    Streaming流量</div>
+                <div class="main_top_chartTimeDelay">
+                    <div id="chartTimeDelay">
+                    </div>
+                    <div id="chartTimeDelayBoard">
+                    </div>
+                </div>
+            </div>
+            <div class="main_bottom">
+                <div class="main_bottom_chartbox_left">
+                    <div class="main_bottom_phoneimg">
+                        网页流媒体播放等待时长</div>
+                    <div class="main_bottom_business">
+                        <div id="business">
+                        </div>
+                        <div id="businessBoard">
+                        </div>
+                    </div>
+                </div>
+                <div class="main_bottom_chartbox_right">
+                    <div class="main_bottom_transmission">
+                        网页流媒体下载时长
+                        <div class="main_bottom_rockets_box border">
+                            <span id="rockets_hour" class="rockets_box_hour">16时</span><span id="rockets_interner"
+                                class="rockets_box_interner">下载时长：90：h</span>
+                        </div>
+                    </div>
+                    <div class="main_bottom_chartbox_rockets">
+                        <div id="rockets">
+                        </div>
+                        <div id="rocketsBoard">
+                        </div>
+                    </div>
+                </div>
+                <div class="main_bottom_chartbox_chartLeft">
+                    <div class="main_bottom_transmission">
+                        流媒体卡顿次数
+                        <div class="main_bottom_rockets_box border">
+                            <span id="appDelayHours" class="rockets_box_hour">16时</span><span id="appDelayInternet"
+                                class="rockets_box_interner">卡顿次数：90次</span>
+                        </div>
+                    </div>
+                    <div class="main_bottom_chartbox_rockets">
+                        <div id="appDelay" class="mainChart">
+                        </div>
+                        <div id="appDelayBoard" class="chartBoard">
+                        </div>
+                    </div>
+                </div>
+                <div class="main_bottom_chartbox_chartLight">
+                    <div class="main_bottom_appDelay">
+                        流媒体卡顿时长</div>
+                    <div class="main_bottom_business">
+                        <div id="downloadRate" class="mainChart">
+                        </div>
+                        <div id="downloadRateBoard" class="chartBoard">
+                        </div>
+                    </div>
+                </div>
+                <div class="main_bottom_chartbox_chartLeft">
+                    <div class="main_bottom_transmission">
+                        成功率</div>
+                    <div class="main_bottom_business">
+                        <div id="successCate" class="mainChart">
+                        </div>
+                        <div id="successCateBoard" class="chartBoard">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //业务类型
+        var businessTotalId = "";
+        //全国
+        var chinaCahrt = "";
+        //省份
+        var privinceText = "";
+        //城市
+        var cityText = "";
+        //小区
+        var viliageText = "";
+        //定义地区
+        var areaVal = "";
+        $(function () {
+            getPassValue();
+            $(window).resize(function () {
+                //alert("改变宽度！");
+                bindData();
+            });
+            bindData();
+            bindDate();
+        })
+        function bindData() {
+            callData();
+        }
+        /*
+        接收传递过来的值
+        */
+        function getPassValue() {
+            //业务类型
+            businessTotalId = $.query.get("businessTotalId");
+            //全国
+            chinaCahrt = $.query.get("chinaCahrt");
+            //省份
+            privinceText = $.query.get("privinceText");
+            //城市
+            cityText = $.query.get("cityText");
+            //小区
+            viliageText = $.query.get("viliageText");
+            //            console.log(netWorkType + ":" + chinaCahrt + ":" + privinceText + ":" + cityText + ":" + viliageText);
+        }
+        function bindDate() {
+            //绑定前一天日期
+            var yesterdayDate = new Date(new Date().getTime()
+					- (1000 * 60 * 60 * 24));
+            //alert(yesterdayDate);
+            var month = (yesterdayDate.getMonth() + 1);
+            if (month < 10) {
+                month = "0" + month;
+            }
+            var day = (yesterdayDate.getDate());
+            if (day < 10) {
+                day = "0" + day;
+            }
+            var yesterdayVal = yesterdayDate.getFullYear() + "-" + month + "-"
+					+ day;
+            //修改隐藏域的值
+            $("#dateCalendar").attr("value", yesterdayVal);
+            //console.log(yesterdayVal);
+            $("#demospan").text(yesterdayVal);
+        }
+        //日历框改变事件
+        function cDayFunc() {
+            cFunc('d');
+        }
+        function cMonthFunc() {
+            cFunc('M');
+        }
+        function cYearFunc() {
+            cFunc('y');
+        }
+        function cFunc(who) {
+            //拿到文本時間
+            var span_time = new Date($("#demospan").text());
+            //alert(span_time);
+            var str, p, c = $dp.cal;
+            var year = "";
+            var month = "";
+            var day = "";
+            var date = "";
+            if (who == 'y') {
+                p = 'y';
+                var dealYear = c.newdate[p];
+                month = span_time.getMonth() + 1;
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                day = span_time.getDate();
+                if (day < 10) {
+                    day = "0" + day;
+                }
+                date = dealYear + "-" + month + "-" + day;
+                $("#dateCalendar").attr("value", date);
+            } else if (who == 'M') {
+                p = 'M';
+                var dealMonth = c.newdate[p];
+                if (dealMonth < 10) {
+                    dealMonth = "0" + dealMonth;
+                }
+                year = span_time.getFullYear();
+                day = span_time.getDate();
+                if (day < 10) {
+                    day = "0" + day;
+                }
+                date = year + "-" + dealMonth + "-" + day;
+                $("#dateCalendar").attr("value", date);
+            } else if (who == 'd') {
+                p = 'd';
+                var dealDay = c.newdate[p];
+                if (dealDay < 10) {
+                    dealDay = "0" + dealDay;
+                }
+                year = span_time.getFullYear();
+                month = span_time.getMonth() + 1;
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                date = year + "-" + month + "-" + dealDay;
+                $("#dateCalendar").attr("value", date);
+            }
+            callData();
+        }
+        /*
+        call方法调用数据
+        */
+        function callData() {
+            getTimeDelayData();
+        }
+        /*
+        获得上网流量数据
+        */
+        function getTimeDelayData() {
+            var table = getDataTable();
+            var data = new Object();
+            data.tableName = table;
+            // 			data.orderBy = "create_time";
+            // 			data.groupBy = "create_time desc";
+            data.condition = areaCondition();
+            call("QueryInceptor", data, function (result) {
+                //                console.log(JSON.stringify(result.data));
+                bindTimeDelay(result.data);
+                bindBusiness(result.data);
+                bindRockets(result.data);
+                bindAppDelay(result.data);
+                bindDownloadRate(result.data);
+                bindBusinessRate(result.data);
+            });
+        }
+        /*
+        拿到表名
+        */
+        function getDataTable() {
+            var table = "";
+            if (chinaCahrt == "checked") {
+                table = "USER_STREAMING_ANALYSIS_COUNTRY_IA_OFFLINE";
+                areaVal = "全国";
+            } else {
+                if (privinceText != "unconditional"
+						&& cityText == "unconditional"
+						&& viliageText == "unconditional") {
+                    table = "USER_STREAMING_ANALYSIS_PROVINCE_IA_OFFLINE";
+                    areaVal = privinceText;
+                } else if (privinceText != "unconditional"
+						&& cityText != "unconditional"
+						&& viliageText == "unconditional") {
+                    table = "USER_STREAMING_ANALYSIS_CITY_IA_OFFLINE";
+                    areaVal = cityText;
+                } else if (privinceText != "unconditional"
+						&& cityText != "unconditional"
+						&& viliageText != "unconditional") {
+                    table = "USER_STREAMING_ANALYSIS_VILLAGE_IA_OFFLINE";
+                    areaVal = viliageText;
+                } else {
+                    table = "USER_STREAMING_ANALYSIS_COUNTRY_IA_OFFLINE";
+                    areaVal = "全国";
+                }
+            }
+            return table;
+        }
+        /*
+        不同地区的查询条件的拼接 "flow_type=" + "'" + businessTotalId + "'"; //可选
+        */
+        function areaCondition() {
+            var condition = "";
+            var dateCalendar = $("#dateCalendar").attr("value");
+            var startDate = dateCalendar + "00:00:00";
+            var endDate = dateCalendar + "23:00:00";
+            if (chinaCahrt == "checked") {
+                condition = "create_time>=" + "'" + startDate + "'"
+						+ " and create_time<=" + "'" + endDate + "'"
+						+ " and key.app_par_sub_type=" + "'" + businessTotalId
+						+ "'";
+            } else {
+                if (privinceText != "unconditional"
+						&& cityText == "unconditional"
+						&& viliageText == "unconditional") {
+                    condition = "create_time>=" + "'" + startDate + "'"
+							+ " and create_time<=" + "'" + endDate + "'"
+							+ " and key.app_par_sub_type=" + "'"
+							+ businessTotalId + "'" + " and key.province="
+							+ "'" + privinceText + "'";
+                } else if (privinceText != "unconditional"
+						&& cityText != "unconditional"
+						&& viliageText == "unconditional") {
+                    condition = "create_time>=" + "'" + startDate + "'"
+							+ " and create_time<=" + "'" + endDate + "'"
+							+ " and key.app_par_sub_type=" + "'"
+							+ businessTotalId + "'" + " and key.province="
+							+ "'" + privinceText + "'" + " and key.city=" + "'"
+							+ cityText + "'";
+                } else if (privinceText != "unconditional"
+						&& cityText != "unconditional"
+						&& viliageText != "unconditional") {
+                    condition = "create_time>=" + "'" + startDate + "'"
+							+ " and create_time<=" + "'" + endDate + "'"
+							+ " and key.app_par_sub_type=" + "'"
+							+ businessTotalId + "'" + " and key.province="
+							+ "'" + privinceText + "'" + " and key.city=" + "'"
+							+ cityText + "'" + " and key.village=" + "'"
+							+ viliageText + "'";
+                } else {
+                    condition = "create_time>=" + "'" + startDate + "'"
+						+ " and create_time<=" + "'" + endDate + "'"
+						+ " and key.app_par_sub_type=" + "'" + businessTotalId
+						+ "'";
+                }
+            }
+            return condition;
+        }
+
+        /*上网流量*/
+        function bindTimeDelay(rawData) {
+            var allData = dealTimeDelayData(rawData);
+            var timeValue = $("#demospan").text();
+            var chartTimeDelay = echarts.init(document
+					.getElementById('chartTimeDelay'));
+            var option = {
+                title: {
+                    show: false,
+                    text: 'Streaming流量'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    padding: 5,
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(bytes)&nbsp;";
+                        return html;
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 15,
+                    bottom: 10,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        length: 6,
+                        inside: true
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    splitArea: {
+                        show: true,
+                        areaStyle: {
+                            color: '#fffaec'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: true,
+                        length: 6
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: 'Streaming流量',
+                    type: 'line',
+                    symbolSize: 12,
+                    lineStyle: {
+                        normal: {
+                            color: '#429fca'
+                        }
+                    },
+                    data: allData.chartData,
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 2,
+                            borderColor: "#429fca"
+                        },
+                        emphasis: {
+                            shadowBlur: 2,
+                            borderColor: "#429fca",
+                            borderWidth: 2
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#429fca',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }]
+            };
+            chartTimeDelay.setOption(option);
+            //数组中最新一组数据值
+            var timeDelayBoardData = getTimeDelayBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxTimeDelayBoardData = getMaxTimeDelayBoardData(allData);
+            bindTimeDelayBoard(timeDelayBoardData, maxTimeDelayBoardData);
+        }
+        /*
+        上网流量数据处理
+        */
+        function dealTimeDelayData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].traffic);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+        /*最新流量数据处理*/
+        function getTimeDelayBoardData(allData) {
+            var dataArr = new Object();
+            var num;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大流量值*/
+        function getMaxTimeDelayBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*流量的仪表盘*/
+        function bindTimeDelayBoard(timeDelayBoardData, maxTimeDelayBoardData) {
+            var chartTimeDelayBoardEchart = echarts.init(document
+					.getElementById('chartTimeDelayBoard'));
+            var option = {
+                title: {
+                    text: '平均Streaming流量检测'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(bytes)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均Streaming流量检测',
+                    type: 'gauge',
+                    max: maxTimeDelayBoardData,
+                    detail: {
+                        formatter: '{value}(bytes)'
+                    },
+                    data: timeDelayBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            chartTimeDelayBoardEchart.setOption(option);
+
+        }
+        /*
+        业务成功率
+        */
+        function bindBusiness(rawData) {
+            var allData = dealBusinessData(rawData);
+            var timeValue = $("#demospan").text();
+            var chartBusiness = echarts.init(document
+					.getElementById('business'));
+            var option = {
+                title: {
+                    show: false,
+                    text: '网页流媒体播放等待时长'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    padding: 5,
+                    position: 'top',
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(ms)&nbsp;";
+                        return html;
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 15,
+                    bottom: 30,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 1,
+                            type: 'dashed'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value}(ms)',
+                        show: true
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: '网页流媒体播放等待时长',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        normal: {
+                            color: '#eebc6d'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#f73f3f'
+                        },
+                        emphasis: {
+                            shadowBlur: 5,
+                            borderColor: "#f73f3f",
+                            borderWidth: 5
+                        }
+                    },
+                    data: allData.chartData,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#EEBC6D',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }]
+            };
+            chartBusiness.setOption(option);
+            //数组中最新一组数据值
+            var businessBoardData = getBusinessBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxBusinessBoardData = getMaxBusinessBoardData(allData);
+            bindBusinessBoard(businessBoardData, maxBusinessBoardData);
+        }
+
+        /*
+        Stearing话单数据处理
+        */
+        function dealBusinessData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].buffertime);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+
+        /*业务成功率数据处理*/
+        function getBusinessBoardData(allData) {
+            var dataArr = new Object();
+            var num = 0;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大业务成功率值*/
+        function getMaxBusinessBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*业务成功率的仪表盘*/
+        function bindBusinessBoard(businessBoardData, maxBusinessBoardData) {
+            var chartBusinessBoardEchart = echarts.init(document
+					.getElementById('businessBoard'));
+            var option = {
+                title: {
+                    text: '平均流媒体播放等待时长'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(ms)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均流媒体播放等待时长',
+                    type: 'gauge',
+                    max: maxBusinessBoardData,
+                    detail: {
+                        formatter: '{value}(ms)'
+                    },
+                    data: businessBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            chartBusinessBoardEchart.setOption(option);
+
+        }
+        /*
+        网页流媒体下载时长
+        */
+        function bindRockets(rawData) {
+            var allData = dealRocketsData(rawData);
+            lnitializeDateRockets(allData);
+            var timeValue = $("#demospan").text();
+            var chartRockets = echarts.init(document.getElementById('rockets'));
+            var option = {
+                title: {
+                    show: false,
+                    text: '网页流媒体下载时长'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: true,
+                    //                    backgroundColor: '#f5f5f5',
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(bytes)&nbsp;";
+                        bindDateRockets(e);
+                        return html;
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    itemSize: 20,
+                    right: 0,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 28,
+                    bottom: 30,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: '网页流媒体下载时长',
+                    type: 'line',
+                    symbolSize: 8,
+                    lineStyle: {
+                        normal: {
+                            color: '#ee711f'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 2,
+                            borderColor: "#EE711F"
+                        },
+                        emphasis: {
+                            shadowBlur: 2,
+                            borderColor: "#EE711F",
+                            borderWidth: 2
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#EE711F',
+                                fontSize: 16
+                            }
+                        }
+                    },
+                    data: allData.chartData
+                }]
+            };
+            chartRockets.setOption(option);
+            //数组中最新一组数据值
+            var rocketsBoardData = getRocketsBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxRocketsBoardData = getMaxRocketsBoardData(allData);
+            bindRocketsBoard(rocketsBoardData, maxRocketsBoardData);
+        }
+
+        /*
+        网页流媒体下载时长
+        */
+        function dealRocketsData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].realplaytime);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+        /*
+        初始化面板的时间和速率
+        */
+        function lnitializeDateRockets(objDealData) {
+            //            console.log(JSON.stringify(objDealData));
+            var date = objDealData.XData[0];
+            var rockets = "下载时长：" + Math.round(objDealData.chartData[0])
+					+ "(ms)";
+            $("#rockets_hour").text(date);
+            $("#rockets_interner").text(rockets);
+        }
+        /*
+        绑定上网速率时间和上网速率
+        */
+        function bindDateRockets(e) {
+            var date = e[0].name;
+            var rockets = "下载时长：" + e[0].value + "(ms)";
+            $("#rockets_hour").text(date);
+            $("#rockets_interner").text(rockets);
+        }
+        /*业务成功率数据处理*/
+        function getRocketsBoardData(allData) {
+            var dataArr = new Object();
+            var num;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大业务成功率值*/
+        function getMaxRocketsBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*业务成功率的仪表盘*/
+        function bindRocketsBoard(rocketsBoardData, maxRocketsBoardData) {
+            var chartRocketsBoardEchart = echarts.init(document
+					.getElementById('rocketsBoard'));
+            var option = {
+                title: {
+                    text: '平均下载时长'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(ms)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均上网速率',
+                    type: 'gauge',
+                    max: maxRocketsBoardData,
+                    detail: {
+                        formatter: '{value}(ms)'
+                    },
+                    data: rocketsBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            chartRocketsBoardEchart.setOption(option);
+        }
+        /*
+        流媒体卡顿次数
+        */
+        function bindAppDelay(rawData) {
+            var allData = dealAppDelayData(rawData);
+            lnitializeDateAppDelay(allData);
+            var timeValue = $("#demospan").text();
+            //            console.log(JSON.stringify(allData));
+            var chartAppDelay = echarts.init(document
+					.getElementById('appDelay'));
+            var option = {
+                title: {
+                    show: false,
+                    text: '流媒体卡顿次数'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: true,
+                    //                    backgroundColor: '#f5f5f5',
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(bytes)&nbsp;";
+                        bindDateAppDelay(e);
+                        return html;
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    itemSize: 20,
+                    right: 0,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 28,
+                    bottom: 30,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: '流媒体卡顿次数',
+                    type: 'line',
+                    symbolSize: 8,
+                    lineStyle: {
+                        normal: {
+                            color: '#ee711f'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 2,
+                            borderColor: "#EE711F"
+                        },
+                        emphasis: {
+                            shadowBlur: 2,
+                            borderColor: "#EE711F",
+                            borderWidth: 2
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#EE711F',
+                                fontSize: 16
+                            }
+                        }
+                    },
+                    data: allData.chartData
+                }]
+            };
+            chartAppDelay.setOption(option);
+            //数组中最新一组数据值
+            var appDelayBoardData = getAppDelayBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxAppDelayBoardData = getMaxAppDelayBoardData(allData);
+            bindAppDelayBoard(appDelayBoardData, maxAppDelayBoardData);
+        }
+        /*
+        上网速率
+        */
+        function dealAppDelayData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].videoblocknum);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+        /*
+        初始化面板的时间和速率
+        */
+        function lnitializeDateAppDelay(objDealData) {
+            //            console.log(JSON.stringify(objDealData));
+            var date = objDealData.XData[0];
+            var rockets = "卡顿次数：" + Math.round(objDealData.chartData[0])
+					+ "(次)";
+            $("#appDelayHours").text(date);
+            $("#appDelayInternet").text(rockets);
+        }
+        /*
+        绑定上网速率时间和上网速率
+        */
+        function bindDateAppDelay(e) {
+            var date = e[0].name;
+            var appDelay = "卡顿次数：" + e[0].value + "(次)";
+            $("#appDelayHours").text(date);
+            $("#appDelayInternet").text(appDelay);
+        }
+        /*业务成功率数据处理*/
+        function getAppDelayBoardData(allData) {
+            var dataArr = new Object();
+            var num;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大业务成功率值*/
+        function getMaxAppDelayBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*应用延时的仪表盘*/
+        function bindAppDelayBoard(appDelayBoardData, maxAppDelayBoardData) {
+            var appDelayBoard = echarts.init(document
+					.getElementById('appDelayBoard'));
+            var option = {
+                title: {
+                    text: '平均卡顿次数'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(次)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均卡顿次数',
+                    type: 'gauge',
+                    max: maxAppDelayBoardData,
+                    detail: {
+                        formatter: '{value}(次)'
+                    },
+                    data: appDelayBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            appDelayBoard.setOption(option);
+        }
+
+        /*
+        网页下载率
+        */
+        function bindDownloadRate(rawData) {
+            var allData = dealDownloadRateData(rawData);
+            var timeValue = $("#demospan").text();
+            var chartDownloadRate = echarts.init(document
+					.getElementById('downloadRate'));
+            var option = {
+                title: {
+                    show: false,
+                    text: '流媒体卡顿时长'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    padding: 5,
+                    position: 'top',
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(ms)&nbsp;";
+                        return html;
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 15,
+                    bottom: 30,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 1,
+                            type: 'dashed'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value} %',
+                        show: true
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: '流媒体卡顿时长',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        normal: {
+                            color: '#eebc6d'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#f73f3f'
+                        },
+                        emphasis: {
+                            shadowBlur: 5,
+                            borderColor: "#f73f3f",
+                            borderWidth: 5
+                        }
+                    },
+                    data: allData.chartData,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#EEBC6D',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }]
+            };
+            chartDownloadRate.setOption(option);
+            //数组中最新一组数据值
+            var downloadRateBoardData = getDownloadRateBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxDownloadRateBoardData = getMaxDownloadRateBoardData(allData);
+            bindDownloadRateBoard(downloadRateBoardData,
+					maxDownloadRateBoardData);
+        }
+        /*网页下载率数据处理*/
+        function dealDownloadRateData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].videoblock_urarion);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+        /*业务成功率数据处理*/
+        function getDownloadRateBoardData(allData) {
+            var dataArr = new Object();
+            var num;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大业务成功率值*/
+        function getMaxDownloadRateBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*应用延时的仪表盘*/
+        function bindDownloadRateBoard(downloadRateBoardData,
+				maxDownloadRateBoardData) {
+            var downloadRateBoard = echarts.init(document
+					.getElementById('downloadRateBoard'));
+            var option = {
+                title: {
+                    text: '平均流媒体卡顿时长'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(ms)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均流媒体卡顿时长',
+                    type: 'gauge',
+                    max: maxDownloadRateBoardData,
+                    detail: {
+                        formatter: '{value}(ms)'
+                    },
+                    data: downloadRateBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            downloadRateBoard.setOption(option);
+        }
+
+        /*
+        成功率
+        */
+        function bindBusinessRate(rawData) {
+            var allData = dealBusinessRateData(rawData);
+            var timeValue = $("#demospan").text();
+            var chartSuccessCate = echarts.init(document
+					.getElementById('successCate'));
+            var option = {
+                title: {
+                    show: false,
+                    text: '成功率'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    padding: 5,
+                    position: 'top',
+                    formatter: function (e) {
+                        var html = "地区:&nbsp;&nbsp;" + areaVal + "<br/>";
+                        html += timeValue + "&nbsp;&nbsp;";
+                        html += e[0].name + "时段" + "&nbsp;&nbsp;&nbsp;&nbsp;<br/>";
+                        html += "&nbsp;" + e[0].seriesName;
+                        html += "&nbsp;&nbsp;:&nbsp;&nbsp;";
+                        html += e[0].value + "(%)&nbsp;";
+                        return html;
+                    }
+
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false
+                        },
+                        magicType: {
+                            show: true,
+                            type: ['bar']
+                        },
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                grid: {
+                    top: 28,
+                    left: 10,
+                    right: 15,
+                    bottom: 30,
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: true,
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    data: allData.XData
+                }],
+                yAxis: [{
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 1,
+                            type: 'dashed'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value} %',
+                        show: true
+                    },
+                    type: 'value'
+                }],
+                series: [{
+                    name: '成功率',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        normal: {
+                            color: '#eebc6d'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#f73f3f'
+                        },
+                        emphasis: {
+                            shadowBlur: 5,
+                            borderColor: "#f73f3f",
+                            borderWidth: 5
+                        }
+                    },
+                    data: allData.chartData,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            textStyle: {
+                                color: '#EEBC6D',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }]
+            };
+            chartSuccessCate.setOption(option);
+            //数组中最新一组数据值
+            var successCateBoardData = getSuccessCateBoardData(allData);
+            //拿到当前一个小时中最大流量值
+            var maxSuccessCateBoardData = getMaxSuccessCateBoardData(allData);
+            bindSuccessCateBoard(successCateBoardData, maxSuccessCateBoardData);
+        }
+        /*
+        业务成功率数据处理
+        */
+        function dealBusinessRateData(rawData) {
+            //x轴数据处理
+            var arrXAxisData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                var date = new Date(rawData[i].create_time);
+                var hour = date.getHours();
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                arrXAxisData.push(dealDateVal);
+            }
+            //Y轴数据
+            var chartData = new Array();
+            for (var i = 0; i < rawData.length; i++) {
+                chartData.push(rawData[i].success_rate);
+            }
+            var objData = new Object();
+            objData.XData = arrXAxisData;
+            objData.chartData = chartData;
+            return objData;
+        }
+        /*业务成功率数据处理*/
+        function getSuccessCateBoardData(allData) {
+            var dataArr = new Object();
+            var num;
+            for (var int = 0; int < allData.chartData.length; int++) {
+                num += allData.chartData[i];
+            }
+            num = (num / allData.chartData.length);
+            dataArr.name = "平均";
+            dataArr.value = num;
+            return dataArr;
+        }
+        /*最大业务成功率值*/
+        function getMaxSuccessCateBoardData(allData) {
+            var maxValue = 0;
+            for (var i = 0; i < allData.chartData.length; i++) {
+                if (allData.chartData[i] > maxValue) {
+                    maxValue = allData.chartData[i];
+                }
+            }
+            //            console.log(maxValue);
+            return maxValue;
+        }
+        /*业务成功率的仪表盘*/
+        function bindSuccessCateBoard(successCateBoardData,
+				maxSuccessCateBoardData) {
+            var chartBusinessBoardEchart = echarts.init(document
+					.getElementById('successCateBoard'));
+            var option = {
+                title: {
+                    text: '平均成功率'
+                },
+                tooltip: {
+                    formatter: "{a} <br/>{b} : {c}(%)"
+                },
+                toolbox: {
+                    orient: 'horizontal',
+                    itemSize: 20,
+                    right: 10,
+                    feature: {
+                        mark: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+
+                    }
+                },
+                series: [{
+                    name: '平均成功率',
+                    type: 'gauge',
+                    max: maxSuccessCateBoardData,
+                    detail: {
+                        formatter: '{value}(%)'
+                    },
+                    data: successCateBoardData,
+                    axisLine: {
+                        lineStyle: {
+                            width: 20
+                        }
+                    },
+                    axisLabel: {
+                        show: false
+                    }
+                }]
+            };
+            chartBusinessBoardEchart.setOption(option);
+
+        }
+	
+    </script>
+</body>
+</html>

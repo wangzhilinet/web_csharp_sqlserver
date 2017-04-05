@@ -1,0 +1,4 @@
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Student\bin\Debug\FisherCommunity.App.Student.dll
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Student\bin\Debug\FisherCommunity.App.Student.pdb
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Student\obj\Debug\FisherCommunity.App.Student.dll
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Student\obj\Debug\FisherCommunity.App.Student.pdb

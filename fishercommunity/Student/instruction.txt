@@ -1,0 +1,139 @@
+﻿1.Browser浏览器 Client客户端
+
+2.ImportData输入数据   ForeignKeys外键
+
+3.Canvas画布
+
+//项目目录说明
+Release 发布
+              API（Application Programming Interface）应用程序接口
+              Common 公共的
+              CRM（Customer Relationship Management）即客户关系管理
+              ERP（Enterprise Resource Planning）企业资源计划
+              HR（Human Resource）人力资源 managerment管理
+              Interfaces 接口，硬件接口网卡配置
+              OA （Office Automation System ）意为办公自动化系统。
+              Service 服务
+              system 是一种windows操作系统下的函数语言。
+              Utility n.效用；实用程序；公用事业；有用
+                         adj.多用途的；多效用的；多功能的
+                         网络功用；实用性；实用工具
+
+D:\Admin\...
+Agent 流媒体，代理商，坐席（系统）
+              Level层，级，等级。
+              Order命令 Approve批准，赞成。
+              Pay工资，薪水，付款。
+              Recharge充值
+              Stocks库存， Query查询，Advanced高级，进阶。
+
+AgentCenter代理商平台
+              Purchase购买。
+
+Analytics分析，解释。
+
+API 
+              Demo（demonstration）演示
+                             。。。。。。。
+              Open
+              Service
+
+App_Code code为代码
+               AutoCompleteService自动完整服务
+               MessageService消息
+
+App_Themes themes为主题
+               Default默认
+
+aspnet_client  客户端
+               System_web
+                            CrystalReportWebFormViewer4
+                            css  html images js
+
+Attendance 考勤
+
+bin 箱，二进制。
+（一种文件格式binary的缩写。一个后缀名为".bin"的文件，只是表明它是binary格式）
+
+Business商务区
+
+Common公共的
+
+Config配置，布局，组态。
+                Install安装
+                                  Permission权限
+                Report报告
+                                  有个配置的XML文件
+                Selection选择
+                
+                Template模板
+                                   Custom自定义
+
+                Upgrade升级，提高质量。
+
+Controls控制，管理。
+                xml。。。。
+
+Cost花费，付出。
+                aspx。。。。    
+                  
+Customer客户
+                aspx。。。。
+
+CustomerCenter客户中心
+                aspx。。。。
+
+CustomerService客户服务
+                aspx。。。。
+
+DirectSales直接出售
+                aspx。。。。
+
+Document文件文档
+                aspx，txt。。。
+
+DownloadFile 下载文件文件夹
+
+Employee员工，职员，雇员。
+
+Finance财务
+
+Images图片集
+                 Button按钮 Commom公共的 Menu菜单 Valid有效的，正当的
+
+Inventory库存
+
+MasterPage母版页
+                  .master。。。。
+
+Member会员，一员。
+
+MemberCenter会员中心
+
+Patch补丁
+
+PlugIns插件
+                 ckeditor合编方，待方。
+                 ckfinder整合后报错，Extending CKFinder Configuration扩展配置
+
+Production产品
+
+Project工程，事业，计划。
+
+Purchase采购
+
+Recruit招聘
+
+Retail零售
+
+Salary给什么加薪
+
+Sales销售
+
+Script脚本，手迹
+
+SupplierCenter供应者，供应商
+
+Training实训
+
+UploadFile上传文件

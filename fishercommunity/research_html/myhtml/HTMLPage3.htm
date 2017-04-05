@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script>
+
+        window.onload = function () {
+
+            waterfull('main', 'box');
+
+        }
+
+        function waterfull(parent, box) {
+
+            //把父元素中class为box额元素取出来
+
+            var oparent = document.getElementById(parent);
+
+            var col = getbyclass(oparent, box);
+
+            //计算一共多少列（页面宽度/每一个盒子的宽度）
+
+            var boxw = col[0].offsetWidth;
+
+            var bol = Math.floor(document.documentElement.clientWidth / boxw);
+
+            oparent.style.cssText = 'width' + boxw * bol + 'px;margin:0 auto';
+
+            var harr = new Array(); //存放高的数组
+
+            for (var i = 0; i < col.length; i++) {
+
+                if (i < bol) {
+
+                    harr.push(col[i].offsetHeight);
+
+                }
+
+                else {
+
+                    var minh = Math.min.apply(null, harr);
+
+                    var index = getminhindex(harr, minh);
+
+                    col[i].style.position = 'absolute';
+
+                    col[i].style.top = minh + 'px';
+
+                    col[i].style.left = boxw * index + 'px';
+
+                    harr[index] += col[i].offsetHeight;
+
+                }
+
+            }
+
+        }
+
+        function getbyclass(parent, clsName) {
+
+            var boxs = new Array(); //用来存放classname为box的盒子
+
+            var oElements = parent.getElementByTagName('*');
+
+            for (var i = 0; i <= oElements.length; i++) {
+
+                if (oElements[i].className == clsName) {
+
+                    boxs.push(oElements[i]);
+
+                }
+
+            }
+
+            return boxs;
+
+        }
+
+        function getminhindex(arr, val) {
+
+            for (var i in arr) {
+
+                if (arr[i] == val) {
+
+                    return i;
+
+                }
+
+            }
+
+        }
+
+    </script>
+</head>
+<body>
+</body>
+</html>

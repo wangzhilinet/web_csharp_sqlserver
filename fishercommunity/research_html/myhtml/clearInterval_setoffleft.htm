@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>盒子移入移除</title>
+    <link href="../../css/common.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .divLeft { width: 200px; height: 200px; background: red; position: relative; left: -200px; top: 50px; }
+        .divLeft span { width: 20px; height: 50px; background: blue; position: absolute; left: 200px; top: 75px; }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var oDiv = document.getElementById('divLeft');
+            oDiv.onmouseover = function () {
+                startMove();
+            }
+        }
+        var timer = null;
+        function startMove() {
+            var oDiv = document.getElementById('divLeft');
+            timer = setInterval(function () {
+                if (oDiv.offsetLeft == 0) {
+                    clearInterval(timer);
+                } else {
+                    var m = 10;
+                    oDiv.style.left = oDiv.offsetLeft + m + 'px';
+                }
+            }, 30)
+        }
+    </script>
+</head>
+<body>
+    <div class="divLeft">
+        <span>分享</span>
+    </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../../research_aspnet/encapsulation/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(".tab .tab-head li").each(function () {
+    var  e      = $(this);
+        var trigger = e.closest(".tab").attr("data-toggle");
+        var filterplay = e.closest('.tab').attr('data-toggle').match(/^autoplay.*/)+'';
+        if(e.closest('.tab').attr('data-toggle') ==filterplay ){
+            $('.tab[data-toggle='+filterplay+''+']').addClass(filterplay);
+        }
+}
+
+function autoplay() {
+    n++;
+    if(n > xx.length) n = 0;
+    changetab(n);
+}
+function changetab(obj) {
+    for(var i=0,len=xx.length;i<len;i++){
+        $(xx[i]).removeClass("active");
+        $(xxx[i]).removeClass("active");
+    }
+    $(xx[n]).addClass("active");
+    $(xxx).eq(n).addClass("active");
+};
+    </script>
+</head>
+<body>
+    <div class="tab" data-toggle="autoplay1" data-speed="2000">
+        <div class="tab-head"> 
+            <ul>
+                <li class="active"><a href="#tab-start1">html</a> </li>
+                <li><a href="#tab-css1">css</a> </li>
+            </ul>
+        </div>
+        <div class="tab-body">
+            <div class="tab-panel active" id="tab-start1">
+                html
+            </div>
+            <div class="tab-panel" id="tab-css1">
+                css
+            </div>
+        </div>
+        <div class="tab" data-toggle="autoplay2" data-speed="1500">
+            ....
+        </div>
+</body>
+</html>

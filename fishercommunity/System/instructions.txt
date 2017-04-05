@@ -1,0 +1,1 @@
+﻿1.system 是windows系统下的一种函数（方法）

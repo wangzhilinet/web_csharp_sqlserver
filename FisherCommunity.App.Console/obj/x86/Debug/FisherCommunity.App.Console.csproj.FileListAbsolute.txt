@@ -1,0 +1,5 @@
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Console\bin\Debug\FisherCommunity.App.Console.exe
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Console\bin\Debug\FisherCommunity.App.Console.pdb
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Console\obj\x86\Debug\FisherCommunity.App.Console.exe
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Console\obj\x86\Debug\FisherCommunity.App.Console.pdb
+C:\Users\DEV23\Desktop\fisher\internet\FisherCommunity.App.Console\obj\x86\Debug\FisherCommunity.App.Console.csprojResolveAssemblyReference.cache
